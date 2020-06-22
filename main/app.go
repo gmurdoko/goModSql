@@ -1,9 +1,8 @@
 package main
 
-import (
-	"mySqlApp/config"
-)
+import "mySqlApp/view"
 
 func main() {
-	config.Env_conn()
+	view.GetAllData()
+	// view.GetDataById()
 }

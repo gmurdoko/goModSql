@@ -2,21 +2,26 @@ package utils
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-func connCheck(db *sql.DB) {
-	if err := db.Ping(); err != nil {
+func connCheck(db *sql.DB) (*sql.DB, error) {
+	err := db.Ping()
+	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
-	fmt.Println("cie berhasil")
+	// defer db.Close()
+	return db, err
 }
 
-func ConnDB(DB_ENGINE, DbSource string) {
-	db, _ := sql.Open(DB_ENGINE, DbSource)
-	connCheck(db)
+//ConnDB receiving data for data connection
+func ConnDB(DbEngine, DbSource string) (db *sql.DB, err error) {
+	db, _ = sql.Open(DbEngine, DbSource)
+	db, err = connCheck(db)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return db, err
 }
