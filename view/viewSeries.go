@@ -69,3 +69,41 @@ func GetDataById() {
 
 	fmt.Println(film)
 }
+func PrepareQuery() {
+	dbEngine, dbSource := config.Env_conn()
+	db, err := utils.ConnDB(dbEngine, dbSource)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	findByID, err := db.Prepare("SELECT * FROM series WHERE id =?")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer findByID.Close()
+	data, err := findByID.Query(1)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer data.Close()
+
+	var result []films
+	for data.Next() {
+		var film = films{}
+		var err = data.Scan(&film.id, &film.title, &film.releasedYear, &film.genre)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		result = append(result, film)
+	}
+	if err = data.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(result)
+
+}

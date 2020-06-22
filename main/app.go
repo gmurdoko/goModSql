@@ -3,6 +3,7 @@ package main
 import "mySqlApp/view"
 
 func main() {
-	view.GetAllData()
+	// view.GetAllData()
 	// view.GetDataById()
+	view.PrepareQuery()
 }
